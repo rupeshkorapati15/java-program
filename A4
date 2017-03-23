@@ -1,0 +1,116 @@
+public class Driver 
+{
+	public static void main(String[] elephant)
+	{
+		
+		String input = "10  /3 ";
+		System.out.println(Driver.processExpression(input));
+		
+	}
+	
+	static int processExpression(String input)
+	{
+		String noSpaces = Driver.removeSpaces(input);
+		int currPos = 0;
+		
+		String firstNum = Driver.getNextNumber(noSpaces, currPos);
+		int fn = Driver.stringToInt(firstNum);
+		currPos = currPos + firstNum.length();
+		
+		char firstOp = Driver.getNextOp(noSpaces, currPos);
+		while(firstOp != '?')
+		{
+			currPos = currPos + 1;
+			String secondNum = Driver.getNextNumber(noSpaces, currPos);
+			currPos = currPos + secondNum.length();
+			int sn = Driver.stringToInt(secondNum);
+
+			fn = Driver.doMath(fn, sn, firstOp);
+			firstOp = Driver.getNextOp(noSpaces, currPos);
+		}
+		
+		return fn;
+	}
+	
+	static int doMath(int fn, int sn, char op)
+	{
+		if(op == '+')
+		{
+			return fn + sn;
+		}
+		else if(op == '-')
+		{
+			return fn - sn;
+		}
+		else if(op == '*')
+		{
+			return fn * sn;
+		}
+		else
+		{
+			return fn / sn;
+		}
+	}
+	
+	static char getNextOp(String s, int startPos)
+	{
+		if(startPos < s.length())
+		{
+			return s.charAt(startPos);
+		}
+		else
+		{
+			return '?';
+		}
+	}
+	
+	static int charToInt(char c)
+	{
+		String digits = "0123456789";
+		return digits.indexOf(c);
+	}
+	
+	static int stringToInt(String s)
+	{
+		int sum = 0;//125
+		int place = 1;//100
+		for(int i = s.length()-1; i >= 0; i = i - 1)
+		{
+			sum = sum + (place * Driver.charToInt(s.charAt(i)));
+			place = place * 10;
+		}
+		return sum;
+	}
+	
+	static String getNextNumber(String s, int startPos)
+	{
+		String answer = "";
+		String ops = "+-*/";
+		for(int i = startPos; i < s.length(); i++)
+		{
+			if(Driver.isMemberOfSet(ops, s.charAt(i)))
+			{
+				return answer;
+			}
+			else
+			{
+				answer = answer + s.charAt(i);
+			}
+		}
+		return answer;
+	}
+	
+	static String removeSpaces(String s)
+	{
+		//"a b c" -> "abc"
+		String answer = "";
+		for(int i = 0; i < s.length(); i++)
+		{
+			if(s.charAt(i) != ' ')
+			{
+				answer = answer + s.charAt(i);
+			}
+		}
+		return answer;
+	}
+}
